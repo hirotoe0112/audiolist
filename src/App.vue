@@ -4,7 +4,7 @@
         <SelectFolder></SelectFolder>
       </div>
       <div>
-        <ItemCount :filescount="files.length"></ItemCount>
+        <ItemCount :filescount="files.length" v-bind:class="{isHidden: isInitialState}"></ItemCount>
       </div>
       <div>
         <AudioItem v-for="file in files" v-bind:key="file.name" :filename="file.name" :path="file.dir"></AudioItem>
@@ -21,7 +21,8 @@
     data(){
       return {
         folderName:"",
-        files:[]
+        files:[],
+        isInitialState:true
       }
     },
     components:{
@@ -33,7 +34,14 @@
       window.electronAPI.returnFiles((event, value) => {
         //メインプロセスから返ってきたファイル一覧を取得
         this.files = value;
+        this.isInitialState=false;
       });
     }
   }
 </script>
+
+<style scoped>
+.isHidden{
+  display:none;
+}
+</style>
